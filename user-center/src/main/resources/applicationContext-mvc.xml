@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task-3.1.xsd">
+
+    <!-- portal.properties 属性注入文件配置 -->
+    <bean id="propertyPlaceholderConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:portal.properties</value>
+            </list>
+        </property>
+        <property name="fileEncoding">
+            <value>UTF-8</value>
+        </property>
+    </bean>
+    <!-- portal.properties 属性注入文件配置 结束 -->
+
+    <!-- http请求参数转bean、返回参数转json 配置 -->
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                    <property name="supportedMediaTypes">
+                        <list>
+                            <value>text/plain;charset=UTF-8</value>
+                            <value>text/html;charset=UTF-8</value>
+                            <value>application/json;charset=UTF-8</value>
+                        </list>
+                    </property>
+                </bean>
+                <ref bean="mappingJacksonHttpMessageConverter" />
+            </list>
+        </property>
+    </bean>
+
+    <bean id="mappingJacksonHttpMessageConverter"
+          class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+        <property name = "supportedMediaTypes">
+            <list>
+                <bean class="org.springframework.http.MediaType">
+                    <constructor-arg index="0" value="text"/>
+                    <constructor-arg index="1" value="plain"/>
+                    <constructor-arg index="2" value="UTF-8"/>
+                </bean>
+                <bean class="org.springframework.http.MediaType">
+                    <constructor-arg index="0" value="*"/>
+                    <constructor-arg index="1" value="*"/>
+                    <constructor-arg index="2" value="UTF-8"/>
+                </bean>
+                <bean class="org.springframework.http.MediaType">
+                    <constructor-arg index="0" value="text"/>
+                    <constructor-arg index="1" value="*"/>
+                    <constructor-arg index="2" value="UTF-8"/>
+                </bean>
+                <bean class="org.springframework.http.MediaType">
+                    <constructor-arg index="0" value="application"/>
+                    <constructor-arg index="1" value="json"/>
+                    <constructor-arg index="2" value="UTF-8"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+    <!-- http请求参数转bean配置、返回参数转json 结束 -->
+
+    <!-- 开启注解 -->
+    <context:annotation-config/>
+    <context:component-scan base-package="com.cloud.base"/>
+    <mvc:annotation-driven/>
+    <!-- 开启注解 结束 -->
+
+    <!-- 开启定时任务注解 -->
+    <task:annotation-driven/>
+    <!-- 开启定时任务注解 结束-->
+
+    <!-- Spring 线程池配置 -->
+    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <!-- 核心线程数 -->
+        <property name="corePoolSize" value="20" />
+        <!-- 最大线程数 -->
+        <property name="maxPoolSize" value="200" />
+        <!-- 队列最大长度 -->
+        <property name="queueCapacity" value="2000" />
+        <!-- 线程池维护线程所允许的空闲时间，默认为60s -->
+        <property name="keepAliveSeconds" value="180" />
+    </bean>
+    <!-- Spring 线程池配置 结束 -->
+
+    <!-- Spring AOP 配置 -->
+    <context:component-scan base-package="aop"/>
+    <aop:aspectj-autoproxy />
+    <bean id="controllerAop" class="aop.ControllerAOP" />
+
+    <aop:config>
+        <aop:aspect id="cloudAop" ref="controllerAop">
+            <aop:pointcut id="target"
+                          expression="execution(public beans.ResultBean *(..)))" />
+            <aop:around method="handlerControllerMethod" pointcut-ref="target" />
+        </aop:aspect>
+    </aop:config>
+    <!-- Spring AOP 配置 结束 -->
+
+</beans>
