@@ -33,7 +33,7 @@
     <servlet-name>dispatcher</servlet-name>
   </filter-mapping>
 
-  <!-- load  configuration-->
+  <!-- load configuration-->
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
