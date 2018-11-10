@@ -1,15 +1,12 @@
 package com.cloud.base.controller;
 
 import beans.ResultBean;
-import com.cloud.base.mapper.TestMapper;
 import com.cloud.base.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import utils.http.exception.HttpProcessException;
-
-import java.io.FileNotFoundException;
 
 @Controller
 @RequestMapping("/spring.url.test")
@@ -39,4 +36,11 @@ public class TestController {
         testService.testHttpApi();
         return new ResultBean<>();
     }
+
+    @RequestMapping(value = "/testHibernate")
+    @ResponseBody
+    public ResultBean testHibernate(Integer id) {
+        return new ResultBean<>(testService.findPersonByID(id));
+    }
+
 }
