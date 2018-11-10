@@ -125,6 +125,11 @@
             <artifactId>poi-ooxml</artifactId>
             <version>3.9</version>
         </dependency>
+        <dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+            <version>1.2.2</version>
+        </dependency>
         <!-- Apache Commons 工具类库 结束-->
 
         <!-- 谷歌 工具类库 -->
@@ -159,7 +164,6 @@
             <artifactId>spring-jdbc</artifactId>
             <version>4.2.4.RELEASE</version>
         </dependency>
-
         <!-- Spring框架 类库 结束-->
 
         <!-- SpringAOP 类库 -->
@@ -193,7 +197,7 @@
         </dependency>
         <!-- 日志 类库 结束 -->
 
-        <!-- mybatis postgresql数据库连接类库 -->
+        <!-- mybatis postgresql 数据库连接类库 -->
         <dependency>
             <groupId>postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -214,7 +218,35 @@
             <artifactId>tomcat-jdbc</artifactId>
             <version>7.0.56</version>
         </dependency>
-        <!-- mybatis postgresql数据库连接类库 结束 -->
+        <!-- mybatis postgresql 数据库连接类库 结束 -->
+
+        <!-- hibernate mysql 数据库连接类库 -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>4.2.4.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>5.2.2.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>5.2.2.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-c3p0</artifactId>
+            <version>5.2.2.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.30</version>
+        </dependency>
+        <!-- hibernate mysql 数据库连接类库 结束 -->
     </dependencies>
 
     <build>
